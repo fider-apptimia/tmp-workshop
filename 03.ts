@@ -53,7 +53,7 @@ async function run() {
 
 
   // try callAsync with & without await
-  callAsync('soft', 'await', 'err');
+  await callAsync('soft', 'await', 'err');
 
 
   // VS:

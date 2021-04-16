@@ -3,30 +3,38 @@ import {log} from './log'
 log.immediate = true;
 
 
-async function a() {
-  log(1, 'a ' + tickNum());
-  log(1, `tick before aa() ${tickNum()}`)
-  await aa(); // TODO await here
-  log(1, `tick after  aa() ${tickNum()}`)
-  ab();
+async function blockingSleep(ms: number) {
+  const until = Date.now() + ms;
+  while(Date.now() < until) {
+    // computations
+  }
 }
-async function aa() {
-  log(2, 'aa ' + tickNum());
-  log(1, `tick in     aa() ${tickNum()}`)
-  aaa();
+
+
+// setTimeout(() => log(0, 'a'), 100);
+// setTimeout(() => log(0, 'b'), 100);
+
+// blockingSleep(200);
+
+// log(0, 'c')
+
+function giveMePromise(): Promise<void> {
+  return new Promise(resolve => {
+    // ...code
+    log(0, 'executor');
+    // setTimeout(resolve, 0);
+    resolve();
+  })
 }
-async function aaa() {
-  log(3, 'aaa ' + tickNum());
-  log(1, `tick in     aaa() ${tickNum()}`)
-}
-async function ab() {
-  log(2, 'ab ' + tickNum());
-}
+
 
 run();
-
 async function run() {
-  log(0, 'before a() ' + tickNum())
-  a();
-  log(0, 'after a() ' + tickNum())
+  setTimeout(() => log(0, 'a'), 0);
+  setTimeout(() => log(0, 'b'), 0);
+
+  // blockingSleep(200);
+  await giveMePromise();
+
+  log(0, 'c')
 }
